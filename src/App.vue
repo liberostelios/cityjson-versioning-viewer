@@ -75,17 +75,7 @@
       <div class="container">
         <div class="row">
           <main class="col-12 py-md-3 pl-md-5">
-            <h2>File upload</h2>
-            <p>Upload a versioned CityJSON file to have fun!</p>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-upload mr-1"></i> Upload</span>
-              </div>
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" id="inputGroupFile01" ref="cityJSONFile" @change="selectedFile">
-                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-              </div>
-            </div>
+            <CityJsonUploader @file-loaded="loadFile"></CityJsonUploader>
           </main>
         </div>
       </div>
@@ -96,13 +86,15 @@
 <script>
 import VersionListItem from './components/VersionListItem.vue'
 import VersionViewer from './components/VersionViewer.vue'
+import CityJsonUploader from './components/CityJsonUploader.vue'
 import $ from 'jquery'
 
 export default {
   name: 'app',
   components: {
     VersionListItem,
-    VersionViewer
+    VersionViewer,
+    CityJsonUploader
   },
   data() {
     return {
@@ -195,40 +187,6 @@ export default {
       this.active_version = null;
       this.file_loaded = false;
     },
-    selectedFile() {
-      // console.log("Selected a CityJSON file...");
-      // console.log(this.$refs.cityJSONFile.files[0]);
-
-      let file = this.$refs.cityJSONFile.files[0];
-      if (!file || file.type != "application/json")
-      {
-        // console.log("This is not a JSON file at all!!!");
-        return;
-      }
-
-      let reader = new FileReader();
-      reader.readAsText(file, "UTF-8");
-      reader.onload = evt => {
-        var cm = JSON.parse(evt.target.result);
-
-        this.citymodel = cm;
-
-        if ("versioning" in cm)
-        {
-          var versions = cm["versioning"]["versions"];
-          for (var key in versions){
-            versions[key]["date"] = new Date(versions[key]["date"]);
-          }
-          this.versioning.versions = versions;
-          this.versioning.branches = cm.versioning.branches;
-          this.file_loaded = true;
-        }
-        else
-        {
-          // console.log("This is not a versioned CityJSON file!");
-        }
-      }
-    },
     extract_citymodel(vid) {
       var cityobjects = this.versioning.versions[vid].objects;
 
@@ -266,6 +224,18 @@ export default {
       var text = JSON.stringify(this.activeCityModel);
 
       this.download(vid + ".json", text);
+    },
+    loadFile(citymodel) {
+      this.citymodel = citymodel;
+
+      this.versioning = this.citymodel.versioning;
+      var versions = this.citymodel.versioning.versions;
+      for (var key in versions){
+        versions[key].date = new Date(versions[key].date);
+      }
+      this.versioning.versions = versions;
+
+      this.file_loaded = true;
     }
   }
 }
