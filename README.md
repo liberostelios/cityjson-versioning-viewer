@@ -1,4 +1,6 @@
-# cityjson-versioning-viewer
+# CityJSON Version viewer
+
+This is a Vue based web viewer for versioned CityJSON files.
 
 ## Project setup
 ```
