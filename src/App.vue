@@ -19,15 +19,10 @@
                   </option>
               </select>
             </div>
-            <div class="list-group py-md-2">
-              <version-list-item
-                  v-for="(item, hash) in orderedVersions(active_branch)"
-                  :key="hash"
-                  :version="item"
-                  :vid="hash"
-                  :active="isActive(hash)"
-              ></version-list-item>
-            </div>              
+            <version-list
+              :versions="orderedVersions(active_branch)"
+              :active_version="active_version"
+            ></version-list>
             <div class="card">
               <div class="card-header bg-secondary text-white"><i class="fas fa-cog mr-1"></i> Settings</div>
               <div class="card-body">
@@ -84,7 +79,7 @@
 </template>
 
 <script>
-import VersionListItem from './components/VersionListItem.vue'
+import VersionList from './components/VersionList.vue'
 import VersionViewer from './components/VersionViewer.vue'
 import CityJsonUploader from './components/CityJsonUploader.vue'
 import $ from 'jquery'
@@ -92,7 +87,7 @@ import $ from 'jquery'
 export default {
   name: 'app',
   components: {
-    VersionListItem,
+    VersionList,
     VersionViewer,
     CityJsonUploader
   },
@@ -175,9 +170,6 @@ export default {
       }
 
       return result;
-    },
-    isActive(vid) {
-      return this.active_version == vid;
     },
     reset() {
       this.versions = {};
