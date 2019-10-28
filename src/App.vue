@@ -119,7 +119,6 @@ export default {
     let self = this;
 
     this.$root.$on('download_version', (vid) => {
-      // console.log(self.file_loaded);
       self.downloadVersion(vid);
     });
 
@@ -143,7 +142,6 @@ export default {
         return {};
       }
 
-      // console.log(this.active_version);
       return this.extract_citymodel(this.active_version);
     },
     showPreview: function () {
