@@ -39,12 +39,19 @@
             </div>
           </div>
           <main class="col-12 col-xl-8 py-2">
-            <div class="row" v-show="isVersionSelected">
+            <div class="row" v-if="isVersionSelected">
               <div class="col-12 my-2">
                 <version-viewer
                   v-bind:version="activeVersionObject"
                   v-bind:vid="active_version"
                 ></version-viewer>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 overflow-auto" style="height: 200px">
+                <CityObjectsTree
+                  :cityobjects="firstLevelObjects(activeCityModel)"
+                ></CityObjectsTree>
               </div>
             </div>
             <div class="row">
@@ -55,7 +62,6 @@
                   </h5>
                   <div class="card-body p-0" style="height: 500px">
                     <three-js-viewer
-                      v-if="isVersionSelected"
                       v-bind:citymodel="activeCityModel"
                     ></three-js-viewer>
                   </div>
@@ -83,6 +89,7 @@ import VersionList from './components/VersionList.vue'
 import VersionViewer from './components/VersionViewer.vue'
 import CityJsonUploader from './components/CityJsonUploader.vue'
 import $ from 'jquery'
+import _ from 'lodash'
 
 export default {
   name: 'app',
@@ -144,6 +151,11 @@ export default {
     }
   },
   methods: {
+    firstLevelObjects(citymodel) {
+      return _.pickBy(citymodel.CityObjects, function(cityobject) {
+        return !(cityobject.parents && cityobject.parents.length > 0);
+      });
+    },
     orderedVersions(branch) {
       var result = {};
 
