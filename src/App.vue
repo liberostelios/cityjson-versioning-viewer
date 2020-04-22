@@ -190,7 +190,8 @@ export default {
       this.file_loaded = false;
     },
     extract_citymodel(vid) {
-      var cityobjects = this.versioning.versions[vid].objects;
+      var object_dict = this.versioning.versions[vid].objects;
+      var original_objects = this.citymodel.CityObjects;
 
       var result = $.extend({}, this.citymodel);
 
@@ -198,15 +199,12 @@ export default {
 
       delete result["versioning"];
 
-      for (var key in this.citymodel["CityObjects"])
-      {
-        if (cityobjects.indexOf(key) != -1)
-        {
-          var new_key = this.citymodel["CityObjects"][key]["cityobject_id"];
-          result["CityObjects"][new_key] = $.extend({}, this.citymodel["CityObjects"][key]);
-          delete result["CityObjects"][new_key]["cityobject_id"];
-        }
-      }
+      // eslint-disable-next-line no-console
+      console.log(Object.keys(object_dict));
+
+      Object.keys(object_dict).forEach((key) => {
+        result["CityObjects"][key] = $.extend({}, original_objects[object_dict[key]]);
+      });
 
       return result;
     },
