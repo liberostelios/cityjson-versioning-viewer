@@ -15,7 +15,7 @@
     "earcut": "^2.2.1",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "popper.js": "^1.16.0",
     "three": "^0.109.0",
     "three-orbitcontrols": "^2.108.1",
